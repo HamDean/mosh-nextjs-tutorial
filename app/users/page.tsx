@@ -1,11 +1,22 @@
-import Link from "next/link"
+import Link from "next/link";
 
-const Users = () => {
+interface User {
+  id: number;
+  name: string;
+}
+
+const Users = async () => {
+  const res = await fetch("https://jsonplaceholder.typicode.com/users");
+  const users: User[] = await res.json();
+
   return (
     <>
-    <div>Users</div>
-    <Link href={'/users/userdetail'}>user detail</Link>
+      <div>Users</div>
+      <ul>
+        {users.map(user => <li key={user.id}>{user.name}</li> )}
+      </ul>
+      <Link href={"/users/userdetail"}>user detail</Link>
     </>
-  )
-}
-export default Users
+  );
+};
+export default Users;
