@@ -1,11 +1,13 @@
-
 interface Props {
-    params: { slug: string[]}
+  params: { slug: string[] };
+  searchParams: { sortOrder: string };
 }
 
-const Products = ({ params: { slug }}: Props) => {
+const Products = ({ params: { slug }, searchParams: { sortOrder } }: Props) => {
   return (
-    <div>Products {slug[1]}</div>
-  )
-}
-export default Products
+    <div>
+      Products {slug} {sortOrder}
+    </div>
+  );
+};
+export default Products;
