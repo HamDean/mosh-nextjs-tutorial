@@ -1,4 +1,5 @@
-import Table from "./table";
+import Link from "next/link";
+import Table from "./Table";
 
 const Users = async ({
   searchParams: { sortOrder },
@@ -8,6 +9,7 @@ const Users = async ({
   return (
     <>
       <h1>Users</h1>
+      <Link href={'/users/new'} className="btn">Create</Link>
       <Table sortOrder={sortOrder} />
     </>
   );
