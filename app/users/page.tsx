@@ -21,7 +21,7 @@ const Users = async ({
 
   return (
     <>
-      <div>Users</div>
+      <h1>Users</h1>
       <table className="table">
         <thead>
           <tr>
