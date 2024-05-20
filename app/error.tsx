@@ -2,8 +2,15 @@
 
 import Error from "next/error";
 
-const ErrorPage = ({ error }: { error: Error }) => {
+const ErrorPage = ({ error, reset }: { error: Error; reset: () => void }) => {
   console.log(error);
-  return <div>Sorry, an unexpected error occured</div>;
+  return (
+    <>
+      <button className="btn btn-primary" onClick={() => reset()}>
+        Retry
+      </button>
+      <div>Sorry, an unexpected error occured</div>
+    </>
+  );
 };
 export default ErrorPage;
