@@ -12,11 +12,14 @@ export function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
+  if (!body.name)
+    return NextResponse.json({ error: "Name is required" }, { status: 400 });
+
   const user = {
     id: users.length + 1,
     name: body.name,
   };
   users.push(user);
 
-  return NextResponse.json(user);
+  return NextResponse.json(user, { status: 201 });
 }
