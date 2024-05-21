@@ -31,3 +31,12 @@ export async function PUT(
 
   NextResponse.json(user);
 }
+
+export function DELETE(
+  request: NextRequest,
+  { params: { id } }: { params: { id: number } }
+) {
+  const filteredUsers = users.filter((user) => user.id !== id);
+
+  return NextResponse.json({});
+}
