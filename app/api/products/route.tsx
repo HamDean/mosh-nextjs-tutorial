@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import schema from "./schema";
 
 const products = [
   { id: 1, name: "Milk", price: 2.4 },
@@ -12,6 +13,11 @@ export function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
+
+  const validationResult = schema.safeParse(body);
+
+  if (!validationResult.success)
+    return NextResponse.json(validationResult.error.errors[1].message, { status: 400 });
 
   const newProduct = {
     id: products.length + 1,
