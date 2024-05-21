@@ -32,3 +32,14 @@ export async function PUT(
 
   return NextResponse.json(product);
 }
+
+export function DELETE(
+  request: NextRequest,
+  { params: { id } }: { params: { id: string } }
+) {
+  const filteredProducts = products.filter(
+    (product) => product.id !== parseInt(id)
+  );
+
+  return NextResponse.json(filteredProducts);
+}
