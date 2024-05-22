@@ -1,11 +1,7 @@
+import prisma from "@/prisma/client";
 import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
-
-const users = [
-  { id: 1, name: "a" },
-  { id: 2, name: "aa" },
-  { id: 3, name: "aaa" },
-];
+import schema from "../schema";
 
 export function GET(
   request: NextRequest,
@@ -19,24 +15,53 @@ export function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params: { id } }: { params: { id: number } }
+  { params: { id } }: { params: { id: string } }
 ) {
-  // Extract the id from the params obj --
-  // extract the request body
+  const user = await prisma.user.findUnique({
+    where: {
+      id: parseInt(id),
+    },
+  });
+
+  if (!user)
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+
   const body = await request.json();
-  // fetch the user with the given ID
-  const user = users.filter((user) => user.id === id);
-  // update the user
-  user[0].name = body.name;
 
-  NextResponse.json(user);
+  const validationResult = schema.safeParse(body);
+  if (!validationResult.success)
+    return NextResponse.json(
+      { error: validationResult.error.errors },
+      { status: 400 }
+    );
+
+  const updatedUser = await prisma.user.update({
+    where: { id: parseInt(id) },
+    data: {
+      name: body.name,
+      email: body.email,
+    },
+  });
+
+  return NextResponse.json(updatedUser);
 }
 
-export function DELETE(
-  request: NextRequest,
-  { params: { id } }: { params: { id: number } }
-) {
-  const filteredUsers = users.filter((user) => user.id !== id);
+// export async function DELETE(
+//   request: NextRequest,
+//   { params: { id } }: { params: { id: string } }
+// ) {
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       id: parseInt(id),
+//     },
+//   });
+  
+//   if (!user)
+//     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  return NextResponse.json({});
-}
+//   const deletedUser = await prisma.user.delete({
+//     where: { id: parseInt(id)}
+//   })
+
+//   return NextResponse.json(deletedUser);
+// }
