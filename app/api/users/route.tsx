@@ -23,6 +23,15 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
 
+  const user = await prisma.user.findUnique({
+    where: {
+      email: body.email,
+    },
+  });
+
+  if (user)
+    return NextResponse.json({ error: "User already exist" }, { status: 400 });
+
   const newUser = await prisma.user.create({
     data: {
       name: body.name,
@@ -30,5 +39,5 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return NextResponse.json(newUser);
+  return NextResponse.json(newUser, { status: 201 });
 }
