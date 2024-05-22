@@ -1,3 +1,4 @@
+import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 const users = [
@@ -6,7 +7,8 @@ const users = [
   { id: 3, name: "aaa" },
 ];
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
+  const users = await prisma.user.findMany()
   return NextResponse.json(users);
 }
 
@@ -15,11 +17,13 @@ export async function POST(request: NextRequest) {
   if (!body.name)
     return NextResponse.json({ error: "Name is required" }, { status: 400 });
 
-  const user = {
-    id: users.length + 1,
-    name: body.name,
-  };
-  users.push(user);
+  const newUser = await prisma.user.create({
+    data: {
+      name: body.name,
+      email: body.email
+    }
+  });
 
-  return NextResponse.json(user, { status: 201 });
+  return NextResponse.json(newUser)
+
 }
