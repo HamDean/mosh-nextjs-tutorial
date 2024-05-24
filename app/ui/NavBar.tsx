@@ -13,7 +13,7 @@ const NavBar = () => {
       {status === "authenticated" ? (
         <div>
           {session?.user?.name?.split(" ")[1]}
-          <Link href={"/api/auth/signout"}>Sign out</Link>
+          <Link href={"/api/auth/signout"}> Sign out</Link>
         </div>
       ) : (
         <Link href={"/api/auth/signin"}>Login in</Link>
