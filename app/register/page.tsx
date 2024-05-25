@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { isDirty, isValid, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,12 +16,12 @@ import {
 import { Input } from "@/components/ui/input";
 
 const schema = z.object({
-    username: z
-      .string()
-      .min(3, { message: "Username must be at least 3 characters" }),
-    email: z.string().email(),
-    password: z.string().min(5, { message: "Weak password" }),
-  });
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters" }),
+  email: z.string().email(),
+  password: z.string().min(5, { message: "Weak password" }),
+});
 
 type formData = z.infer<typeof schema>;
 
@@ -41,6 +41,8 @@ const SignupPage = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
+
+    form.reset();
   };
 
   return (
