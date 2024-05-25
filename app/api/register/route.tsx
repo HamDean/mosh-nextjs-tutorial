@@ -4,7 +4,7 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 
 const schema = z.object({
-  username: z.string().email(),
+  username: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(5),
 });
@@ -13,8 +13,10 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
 
   const validation = schema.safeParse(body);
-  if (!validation.success)
+  if (!validation.success) {
+    console.log(validation.error.errors);
     return NextResponse.json(validation.error.errors, { status: 400 });
+  }
 
   const user = await prisma.user.findUnique({
     where: { email: body.email },

@@ -28,16 +28,25 @@ const SignupPage = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       username: "",
+      email: "",
+      password: "",
     },
   });
 
-  const onSubmit = (values: formData) => {
-    console.log(values);
+  const onSubmit = async (values: formData) => {
+    await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-[500px]">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 w-[500px]"
+      >
         <FormField
           control={form.control}
           name="username"
