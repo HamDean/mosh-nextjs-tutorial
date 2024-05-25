@@ -16,10 +16,12 @@ import {
 import { Input } from "@/components/ui/input";
 
 const schema = z.object({
-  username: z.string().min(3),
-  email: z.string().email(),
-  password: z.string().min(5),
-});
+    username: z
+      .string()
+      .min(3, { message: "Username must be at least 3 characters" }),
+    email: z.string().email(),
+    password: z.string().min(5, { message: "Weak password" }),
+  });
 
 type formData = z.infer<typeof schema>;
 
